@@ -1,0 +1,20 @@
+name: artisan
+channels:
+   - ckiddo74
+   - conda-forge
+
+dependencies:
+   - heterograph=2.0
+   - python=3.12
+   - pip
+   - make
+   - cppzmq=4.9.0
+   - boost-cpp
+   - python-clang=15.0.7
+   - clang-format=15.0.7
+   - gxx=12.2.0
+   - pip:
+      - -e .
+
+
+

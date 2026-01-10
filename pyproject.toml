@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=61.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "imperial-cc-artisan"
+version = "1.0"
+authors = [
+  { name="Gabriel Figueiredo", email="gabriel.figueiredo@imperial.ac.uk" },
+]
+description = "Artisan metaprogramming approach for C++ programs"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "pyzmq",
+    "pcpp",
+    "colorama"
+]
+
+[project.urls]
+repository = "https://github.com/custom-computing-ic/artisan"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where=["."]
+include = ["artisan", "artisan.*"]

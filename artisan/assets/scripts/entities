@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+import sys
+import argparse
+import fnmatch
+from colorama import Fore, Style
+from heterograph.hgraph import HGraph
+
+import clang.cindex as ci
+from artisan.factory.engine import info_entity, entities, metadata
+
+parser = argparse.ArgumentParser(add_help=False)
+
+parser.add_argument('--view', action="store_true", help = 'views cnode hierarchy')
+parser.add_argument('--count', action="store_true", help = 'counts the number of (filtered) cnodes')
+parser.add_argument('-v', action="count", default=0, help = 'verbose level')
+
+(options, flt) = parser.parse_known_args()
+
+if not flt:
+    filter = ""
+elif len(flt) > 1:
+    raise RuntimeError("only one filter allowed!")
+else:
+    filter = flt[0]
+
+_entities =  entities()
+
+
+if filter != "":
+    _entities = [ e for e in _entities if fnmatch.fnmatch(e.lower(), filter.lower()) ]
+
+_entities.sort()
+
+def output_info(entity, verbose_level):
+    if verbose_level == 0:
+        print(entity)
+    else:
+        if verbose_level == 1:
+            info = info_entity(entity, filter="*", v=1)
+            info = info.lstrip().split('\n', 1)[0]
+        else:
+            info = info_entity(entity, filter="*", v=verbose_level-2)
+
+        print(info)
+
+        #base = normalize_class_name(interface.__name__)
+
+
+        #header = " ⭅ ".join([ f"{Fore.LIGHTBLACK_EX}%s{Style.RESET_ALL}" % e if base == e else e for e in ancestry ])
+        #print(header)
+
+
+for entity in _entities:
+    output_info(entity, options.v)
+
+if options.count:
+    print(f"{Fore.LIGHTBLUE_EX}=========================={Style.RESET_ALL}")
+    print(f"{Fore.LIGHTBLUE_EX}... number of cnodes: %d{Style.RESET_ALL}" % len(_entities))
+
+if options.view:
+
+    # entity => vx
+    entity_map = { }
+    # vx => entity
+    label_map = {}
+    # vx => True/False
+    base_map = { }
+
+    def label_vx(g, vx):
+        return label_map[vx] if vx in label_map else "---"
+
+    g=HGraph()
+    g.vstyle={'label': label_vx}
+
+
+    for e in _entities:
+        (_, _, ancestry) = metadata(e)
+        child_vx = None
+        for entity in ancestry:
+            if entity not in entity_map:
+                vx = g.add_vx()
+                entity_map[entity] = vx
+                label_map[vx] = entity
+            else:
+                vx = entity_map[entity]
+
+            if child_vx is not None:
+                g.add_edge(vx, child_vx)
+            child_vx = vx
+
+        vx = entity_map[e]
+
+    g.view()
