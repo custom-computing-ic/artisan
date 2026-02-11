@@ -5,7 +5,7 @@ channels:
 
 dependencies:
    - heterograph=2.0
-   - python=3.12
+   - python=3.11
    - pip
    - make
    - cppzmq=4.9.0
