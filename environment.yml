@@ -4,12 +4,11 @@ channels:
    - conda-forge
 
 dependencies:
-   - heterograph=2.0
-   - python=3.11
+   - python>=3.10
+   - ckiddo74::heterograph=2.0   
    - pip
-   - make
    - cppzmq=4.9.0
-   - boost-cpp
+   - libboost-headers >=1.90,<1.91.0a0
    - python-clang=15.0.7
    - clang-format=15.0.7
    - gxx=12.2.0

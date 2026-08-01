@@ -24,6 +24,7 @@ fi
 unset CONDA_ENV_NAME
 unset CONDA_ENV_DIR
 
+
 if [ "${1:0:1}" != "/" ]; then
     CONDA_ENV_NAME=$1
     # Check if conda env exists
