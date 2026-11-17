@@ -50,20 +50,36 @@ This model scales from small scripts to large multi-file projects.
 
 ## Installation
 
-### Using Conda (recommended)
+### Development environment
 
 Create a conda development environment as follows:
 
 ```bash
 conda env create -f environment.yml
-# extra step to configure environment variables
-bash conda/post-install.sh artisan 
+# configure environment variables
+bash conda/recipe/post-install.sh artisan
 ```
 
 To activate the environment:
-```
+```bash
 conda activate artisan
 ```
+
+The environment installs Artisan in editable mode.
+
+### Use the published Conda package
+
+On Linux x86-64, create an environment with the published package:
+
+```bash
+conda create -n my-artisan -c ckiddo74 -c conda-forge python=3.12 artisan
+conda activate my-artisan
+```
+
+Alternatively, add `artisan` to your project's `environment.yml` with the
+`ckiddo74` and `conda-forge` channels. Choose a Python version supported by
+the published builds.
+
 
 ---
 
@@ -105,6 +121,20 @@ and follow the `README.md` files in each section.
 
 ---
 
+## Tests
+
+With the development environment activated, install pytest and run the tests from
+the repository root:
+
+```bash
+python -m pytest tests
+```
+
+The tutorial-based tests use libclang and `clang-format`. Integration tests also
+require `make` and `g++`; those checks are skipped when the respective tool is
+unavailable. See [tests/README.md](tests/README.md) for details.
+
+---
 ## Project Structure
 
 ```
